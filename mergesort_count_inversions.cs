@@ -4,20 +4,19 @@ using System.IO;
 using System.Linq;
 class Solution {
 
-    static long countInversions(int[] arr) {
-        if(arr == null || arr.Length ==1)
+    
+    static long countInversions(int[] a) {
+        if(a == null || a.Length == 1)
             return 0;
-        
-        int[] b = (int[])arr.Clone();
-        return mergeSort(arr,0,arr.Length,b, 0);
-        
+        int[] b = (int[])a.Clone();
+        return mergeSort(a,0,a.Length,b);
     }
-    static long mergeSort(int[] a, int start, int end, int[] b, int count){
+    static long mergeSort(int[] a, int start, int end, int[] b){
         if(end-start < 2)
             return 0;
         int midpoint = (start+end)/2;
-        mergeSort(a,0,midpoint,b, count);
-        mergeSort(a,midpoint,a.Length,b,count);
+		long count = mergeSort(b,0,midpoint,a);
+        count += mergeSort(b,midpoint,end,a);
         return count+merge(a,start,midpoint, end,b);
     }
     static long merge(int[] A,int start, int midpoint, int end, int[] B){
@@ -27,7 +26,7 @@ class Solution {
                 B[k] = A[i];
                 i = i + 1;
             } else {
-                count++;
+                count+=midpoint-1;
                 B[k] = A[j];
                 j = j + 1;
             }
